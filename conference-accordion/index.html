@@ -62,6 +62,7 @@
 
   /* Empty white sections around the block so the whole animation is visible while scrolling */
   .spacer { height: 100vh; background: var(--white); }
+  .spacer--top { height: 240px; }
 
   .block { padding: var(--section-pad) 16px; background: var(--indigo); }
   .block__inner { max-width: 1200px; margin: 0 auto; }
@@ -128,8 +129,9 @@
       border-radius: 24px;
       background: var(--white);
     }
-    /* The exported PNG carries the old panel's rounded top corners: trim them so no seam shows */
-    .illu img { display: block; width: 100%; height: auto; clip-path: inset(24px 0 0 0); }
+    /* The exported PNG has purple rounded corners baked in (radius 32): cut the top strip
+       and round the bottom past that radius so no purple shows inside the white panel */
+    .illu img { display: block; width: 100%; height: auto; clip-path: inset(24px 0 0 0 round 0 0 36px 36px); }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -138,7 +140,7 @@
 </style>
 </head>
 <body>
-<div class="spacer" aria-hidden="true"></div>
+<div class="spacer spacer--top" aria-hidden="true"></div>
 <section class="block" aria-labelledby="title">
   <div class="block__inner">
     <h2 class="block__title" id="title">Собираем конференцию целиком</h2>
