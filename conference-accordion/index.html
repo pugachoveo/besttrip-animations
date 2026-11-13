@@ -60,7 +60,7 @@
   }
   button { font: inherit; color: inherit; }
 
-  /* Empty white sections around the block so scrolling and the sticky illustration are visible */
+  /* Empty white sections around the block so the whole animation is visible while scrolling */
   .spacer { height: 100vh; background: var(--white); }
 
   .block { padding: var(--section-pad) 16px; background: var(--indigo); }
@@ -114,20 +114,22 @@
   @media (min-width: 600px) {
     .block__inner { max-width: 720px; }
   }
-  /* Desktop: list 6/12 + sticky illustration 6/12 */
+  /* Desktop: list 6/12 + illustration panel 6/12, stretched to the list height */
   @media (min-width: 1024px) {
     .block__inner { max-width: 1200px; }
     .block__content { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .block__content { align-items: stretch; }
     .illu {
-      position: sticky;
-      top: 24px;
-      display: block;
-      aspect-ratio: 592 / 712;
+      display: flex;
+      min-height: 712px;
+      align-items: flex-end;
+      justify-content: center;
       overflow: hidden;
       border-radius: 24px;
       background: var(--white);
     }
-    .illu img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    /* The exported PNG carries the old panel's rounded top corners: trim them so no seam shows */
+    .illu img { display: block; width: 100%; height: auto; clip-path: inset(24px 0 0 0); }
   }
 
   @media (prefers-reduced-motion: reduce) {
