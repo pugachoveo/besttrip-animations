@@ -218,10 +218,29 @@ const cardHTML = (p) => `
     <div class="card__bottom"><ul class="card__list">${p.items.map((i) => `<li>${i}</li>`).join('')}</ul><p class="card__terms">${p.terms}</p></div>
   </article>`;
 
+/* As in Figma, the single no-subscription card is as tall as the subscription cards:
+   measure them off-screen at the current width and use that as its minimum height */
+const probe = document.createElement('div');
+probe.className = 'cards';
+probe.setAttribute('aria-hidden', 'true');
+probe.style.cssText = 'position:absolute;left:0;top:0;width:100%;visibility:hidden;pointer-events:none;';
+stage.appendChild(probe);
+function fullCardHeight() {
+  probe.innerHTML = PLANS.subscription.map(cardHTML).join('');
+  const h = Math.max(...[...probe.children].map((c) => c.offsetHeight));
+  probe.innerHTML = '';
+  return h;
+}
+function fitSingle() {
+  if (current === 'subscription') return;
+  const card = cards.querySelector('.card');
+  if (card) card.style.minHeight = `${fullCardHeight()}px`;
+}
 function render(plan) {
   const list = PLANS[plan];
   cards.classList.toggle('cards--single', list.length === 1);
   cards.innerHTML = list.map(cardHTML).join('');
+  fitSingle();
 }
 
 function movePill() {
@@ -250,8 +269,8 @@ function choose(plan) {
 }
 
 render(current);
-document.fonts.ready.then(movePill);
-addEventListener('resize', movePill);
+document.fonts.ready.then(() => { movePill(); fitSingle(); });
+addEventListener('resize', () => { movePill(); fitSingle(); });
 document.getElementById('switch').addEventListener('click', (e) => {
   const b = e.target.closest('.switch__btn');
   if (b) choose(b.dataset.plan);
