@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Что отмечают наши клиенты — BestTrip</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="../assets/header.js" defer></script>
+<style>
+  /* Tokens: BestTrip design-system/tokens.css */
+  :root {
+    --white: #ffffff;
+    --ink: #17063c;
+    --section-grey: #f1f3f9;
+    --indigo: #601df1;
+    --fast: 150ms;
+    --base: 250ms;
+    --ease-state: ease-in-out;
+
+    /* mobile (<600) */
+    --h2-size: 28px; --h2-lh: 36px; --h2-ls: 0px;
+    --h4-size: 20px; --h4-lh: 26px;
+    --section-pad: 32px;
+    --title-gap: 24px;
+    --card-pad: 24px;
+    --card-radius: 24px;
+    --card-logo-w: 160px;
+  }
+  @media (min-width: 600px) {
+    :root {
+      --h2-size: 32px; --h2-lh: 40px; --h2-ls: 0.32px;
+      --h4-size: 20px; --h4-lh: 28px;
+      --section-pad: 48px;
+      --title-gap: 32px;
+      --card-pad: 48px;
+      --card-radius: 32px;
+      --card-logo-w: 200px;
+    }
+  }
+  @media (min-width: 1024px) {
+    :root {
+      --h2-size: 40px; --h2-lh: 48px; --h2-ls: 0.4px;
+      --h4-size: 24px; --h4-lh: 32px;
+      --section-pad: 64px;
+      --card-pad: 64px;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--white);
+    color: var(--ink);
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-size: 16px;
+    line-height: 22px;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  button { font: inherit; color: inherit; }
+
+  .block { padding: var(--section-pad) 0; background: var(--white); }
+  .block__title {
+    margin: 0 16px var(--title-gap);
+    text-align: center;
+    font-size: var(--h2-size);
+    line-height: var(--h2-lh);
+    font-weight: 700;
+    letter-spacing: var(--h2-ls);
+  }
+
+  /* ---------- Logo rows: full-bleed marquees ---------- */
+  .rows { display: grid; gap: 16px; }
+  .row { overflow: hidden; }
+  .track { display: flex; width: max-content; gap: 16px; padding-inline: 8px; will-change: transform; }
+  .row[data-dir='left'] .track { animation: mq-left 48s linear infinite; }
+  .row[data-dir='right'] .track { animation: mq-right 48s linear infinite; }
+  .rows:hover .track, .rows:focus-within .track { animation-play-state: paused; }
+  @keyframes mq-left { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @keyframes mq-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+
+  .logo {
+    position: relative;
+    display: grid;
+    width: 186px;
+    height: 80px;
+    flex: 0 0 auto;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    border-radius: 16px;
+    background: transparent;
+    cursor: pointer;
+  }
+  .logo img { grid-area: 1 / 1; display: block; width: 136px; height: 68px; transition: opacity var(--fast) var(--ease-state); }
+  .logo .is-color { opacity: 0; }
+  .logo:hover .is-color, .logo:focus-visible .is-color, .logo[aria-pressed='true'] .is-color { opacity: 1; }
+  .logo:hover .is-grey, .logo:focus-visible .is-grey, .logo[aria-pressed='true'] .is-grey { opacity: 0; }
+  .logo:focus-visible { outline: 2px solid var(--indigo); outline-offset: -2px; }
+
+  /* ---------- Review card ---------- */
+  .card {
+    max-width: 1200px;
+    margin: 32px 16px 0;
+    border-radius: var(--card-radius);
+    padding: var(--card-pad);
+    background: var(--section-grey);
+    text-align: center;
+  }
+  @media (min-width: 600px) { .card { margin-inline: auto; width: min(720px, calc(100% - 48px)); } }
+  @media (min-width: 1024px) { .card { width: min(1200px, calc(100% - 64px)); } }
+  .card__body { display: flex; flex-direction: column; align-items: center; gap: 16px; transition: opacity var(--base) var(--ease-state), transform var(--base) var(--ease-state); }
+  .card__body.is-out { opacity: 0; transform: translateY(8px); }
+  .card__logo { display: block; width: var(--card-logo-w); height: auto; aspect-ratio: 2 / 1; }
+  .card__text { max-width: 693px; }
+  .card__title { margin: 0 0 8px; font-size: var(--h4-size); line-height: var(--h4-lh); font-weight: 700; }
+  .card__desc { margin: 0; }
+
+  /* ---------- Phone: one swipeable row instead of two marquees ---------- */
+  @media (max-width: 599px) {
+    .row[data-dir='right'] { display: none; }
+    .row { overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 16px; scrollbar-width: none; }
+    .row::-webkit-scrollbar { display: none; }
+    .row .track { animation: none !important; padding-inline: 16px; gap: 8px; }
+    .row .is-clone { display: none; }
+    .logo { width: 136px; height: 72px; scroll-snap-align: start; }
+    .logo img { width: 120px; height: 60px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .track { animation: none !important; }
+    .row { overflow-x: auto; scrollbar-width: none; }
+    .row .is-clone { display: none; }
+    *, *::before, *::after { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<section class="block" aria-labelledby="title">
+  <h2 class="block__title" id="title">Что отмечают наши клиенты</h2>
+  <div class="rows" id="rows"></div>
+  <div class="card" aria-live="polite">
+    <div class="card__body" id="card"></div>
+  </div>
+</section>
+
+<script>
+/* Copy: Figma node 7970:131900 «Отзывы» */
+const CLIENTS = [
+  { id: 'ozon', name: 'Ozon Банк', head: 'Оценили круглосуточную поддержку', body: 'оперативное решение задач в любое время без выходных' },
+  { id: 'grand_capital', name: 'Гранд Капитал', head: 'Отмечают высокий уровень сервиса', body: 'качественное сопровождение до и после командировки, помощь в решении всех вопросов во время поездки, структурированность информации и памяток' },
+  { id: 'avexima', name: 'Avexima', head: 'Ценят профессионализм персонала', body: 'отдельная благодарность менеджерам Ксении и Веронике за чёткость, терпение, внимательность и умение общаться с иностранными партнёрами от имени группы' },
+  { id: 'data_universe', name: 'Data Universe', head: 'Оценили круглосуточную поддержку', body: 'оперативное решение задач в любое время без выходных' },
+  { id: 'jetica', name: 'Jetica', head: 'Оценили круглосуточную поддержку', body: 'оперативное решение задач в любое время без выходных' },
+  { id: 'rusendurance', name: 'РЭК', head: 'Оценили круглосуточную поддержку', body: 'оперативное решение задач в любое время без выходных' },
+  { id: 'heart_of_russia', name: 'Сердце России', head: 'Оценили круглосуточную поддержку', body: 'оперативное решение задач в любое время без выходных' },
+  { id: 'successful_investments', name: 'Успешные инвестиции', head: 'Оценили круглосуточную поддержку', body: 'оперативное решение задач в любое время без выходных' },
+  { id: 'capitalrt', name: 'Capital RT', head: 'Оценили круглосуточную поддержку', body: 'оперативное решение задач в любое время без выходных' },
+];
+const logo = (id, c) => `../assets/logos/${id}-${c}.png`;
+
+/* Row 1 in Figma order, row 2 reversed; each set is repeated so the marquee loops seamlessly */
+const tile = (c, clone) => `<button class="logo${clone ? ' is-clone' : ''}" type="button" data-id="${c.id}" aria-pressed="false"${clone ? ' tabindex="-1" aria-hidden="true"' : ''} aria-label="Отзыв: ${c.name}">
+    <img class="is-grey" src="${logo(c.id, 'grey')}" alt=""><img class="is-color" src="${logo(c.id, 'color')}" alt=""></button>`;
+const row = (list, dir) => `<div class="row" data-dir="${dir}"><div class="track">${list.map((c) => tile(c, false)).join('')}${list.map((c) => tile(c, true)).join('')}</div></div>`;
+document.getElementById('rows').innerHTML = row(CLIENTS, 'left') + row([...CLIENTS].reverse(), 'right');
+
+const card = document.getElementById('card');
+let current = null;
+function show(id, animate = true) {
+  if (id === current) return;
+  current = id;
+  const c = CLIENTS.find((x) => x.id === id);
+  document.querySelectorAll('.logo').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.id === id)));
+  const render = () => {
+    card.innerHTML = `<img class="card__logo" src="${logo(c.id, 'color')}" alt="${c.name}">
+      <div class="card__text"><p class="card__title">${c.head}</p><p class="card__desc">${c.body}</p></div>`;
+  };
+  if (!animate || matchMedia('(prefers-reduced-motion: reduce)').matches) { render(); return; }
+  card.classList.add('is-out');
+  setTimeout(() => { render(); requestAnimationFrame(() => card.classList.remove('is-out')); }, 200);
+}
+show('ozon', false);
+
+/* Click (tap) picks a client; on devices with a mouse, hovering a logo previews its review too */
+document.getElementById('rows').addEventListener('click', (e) => {
+  const b = e.target.closest('.logo');
+  if (b) show(b.dataset.id);
+});
+if (matchMedia('(hover: hover)').matches) {
+  document.getElementById('rows').addEventListener('mouseover', (e) => {
+    const b = e.target.closest('.logo');
+    if (b) show(b.dataset.id);
+  });
+}
+</script>
+</body>
+</html>

@@ -13,6 +13,13 @@
         { label: 'Конференции', href: 'conference-accordion/' },
       ],
     },
+    {
+      id: 'start-saving',
+      label: 'Начать экономить',
+      items: [
+        { label: 'Отзывы и Кейсы', href: 'client-reviews/' },
+      ],
+    },
   ];
   const PHONE = { label: '0011', href: 'tel:0011' };
   const ACTIONS = {
