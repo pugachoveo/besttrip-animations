@@ -16,6 +16,7 @@
 
 - [Собираем конференцию целиком](https://pugachoveo.github.io/besttrip-animations/conference-accordion/) — аккордеон, пункты раскрываются независимо, карточка с иллюстрацией едет при прокрутке.
 - [Что отмечают наши клиенты](https://pugachoveo.github.io/besttrip-animations/client-reviews/) — лента логотипов и карточка отзыва.
+- [Тарифы](https://pugachoveo.github.io/besttrip-animations/pricing/) — переключатель тарифов с абонентской платой и без.
 
 ## Хедер
 

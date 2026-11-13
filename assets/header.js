@@ -18,6 +18,7 @@
       label: 'Начать экономить',
       items: [
         { label: 'Отзывы и Кейсы', href: 'client-reviews/' },
+        { label: 'Посмотреть тарифы', href: 'pricing/' },
       ],
     },
   ];
@@ -70,6 +71,11 @@
 
   const header = document.createElement('header');
   header.className = 'bt-header';
+  // Stay invisible and transition-free until header.css arrives, otherwise the mobile panel flashes on load
+  header.style.visibility = 'hidden';
+  const ready = () => requestAnimationFrame(() => { header.style.visibility = ''; header.setAttribute('data-ready', ''); });
+  css.addEventListener('load', ready);
+  css.addEventListener('error', ready);
   header.innerHTML = `
     <div class="bth-desktop">
       <a class="bth-desktop__logo" href="${root.href}" aria-label="BestTrip"><img src="${asset('logo-desktop.svg')}" alt="BestTrip"></a>

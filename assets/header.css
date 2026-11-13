@@ -253,6 +253,9 @@
   .bth-desktop .bth-mark { top: auto; bottom: 3.2px; left: 46.4px; }
 }
 
+/* No transitions until the stylesheet is in place (see header.js), so nothing animates on page load */
+.bt-header:not([data-ready]) * { transition: none !important; }
+
 @media (prefers-reduced-motion: reduce) {
   .bt-header *, .bth-overlay, .bth-panel { transition: none !important; }
 }

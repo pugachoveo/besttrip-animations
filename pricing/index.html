@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Тарифы — BestTrip</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="../assets/header.js" defer></script>
+<style>
+  /* Tokens: BestTrip design-system/tokens.css. Layout: Figma «Посмотреть тарифы» (Pricing/1440, 1024, 768, 375) */
+  :root {
+    --white: #ffffff;
+    --ink: #17063c;
+    --secondary-text: #4b5d73;
+    --section-grey: #f1f3f9;
+    --grey-10: #e6ecf3;
+    --grey-60: #8496ab;
+    --indigo: #601df1;
+    --fast: 150ms;
+    --base: 250ms;
+    --slow: 350ms;
+    --ease-state: ease-in-out;
+    --ease-out: ease-out;
+
+    /* mobile (<600) */
+    --h2-size: 28px; --h2-lh: 36px;
+    --sub-size: 20px; --sub-lh: 28px;
+    --section-pad: 32px;
+    --price: 36px; --price-lh: 44px; --cur: 28px;
+    --card-pad: 24px;
+    --card-radius: 24px;
+  }
+  @media (min-width: 600px) {
+    :root {
+      --h2-size: 32px; --h2-lh: 40px;
+      --sub-size: 20px; --sub-lh: 28px;
+      --section-pad: 48px;
+      --price: 48px; --price-lh: 56px; --cur: 32px;
+      --card-pad: 32px;
+      --card-radius: 32px;
+    }
+  }
+  @media (min-width: 1024px) {
+    :root {
+      --h2-size: 40px; --h2-lh: 48px;
+      --sub-size: 24px; --sub-lh: 32px;
+      --section-pad: 64px;
+      --price: 64px; --price-lh: 72px; --cur: 40px;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--section-grey);
+    color: var(--ink);
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-size: 16px;
+    line-height: 22px;
+    -webkit-font-smoothing: antialiased;
+  }
+  button { font: inherit; color: inherit; }
+
+  /* Empty grey sections around the white block, as if it sat in the middle of a page */
+  .spacer { height: 100vh; background: var(--section-grey); }
+  .spacer--top { height: 240px; }
+
+  .block { padding: var(--section-pad) 16px calc(var(--section-pad) + 0px); background: var(--white); }
+  .block__inner { max-width: 1200px; margin: 0 auto; }
+  @media (min-width: 600px) and (max-width: 1023px) { .block__inner { max-width: 720px; } }
+
+  .block__title {
+    margin: 0 0 16px;
+    color: var(--indigo);
+    text-align: center;
+    font-size: var(--h2-size);
+    line-height: var(--h2-lh);
+    font-weight: 700;
+  }
+  .block__subtitle {
+    margin: 0 0 32px;
+    text-align: center;
+    font-size: var(--sub-size);
+    line-height: var(--sub-lh);
+    font-weight: 700;
+  }
+
+  /* ---------- Cards ---------- */
+  .stage { position: relative; transition: height var(--slow) var(--ease-state); }
+  .cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    transition: opacity var(--base) var(--ease-out), transform var(--base) var(--ease-out);
+  }
+  .cards.is-out { opacity: 0; transform: translateY(12px); }
+  @media (min-width: 1024px) {
+    .cards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .cards--single { grid-template-columns: minmax(0, 389px); justify-content: center; }
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--grey-10);
+    border-radius: var(--card-radius);
+    background: var(--white);
+  }
+  .card--accent { background: var(--section-grey); }
+  .card__top { padding: var(--card-pad); border-bottom: 1px solid var(--grey-10); }
+  .card__price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; margin: 0; }
+  .card__sum { font-size: var(--price); line-height: var(--price-lh); font-weight: 800; }
+  .card__cur { font-size: var(--cur); font-weight: 700; }
+  .card__per { color: var(--grey-60); font-size: 16px; line-height: 22px; }
+  .card__bottom { display: flex; flex: 1; flex-direction: column; gap: 16px; padding: var(--card-pad); }
+  .card__list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+  .card__terms { margin: auto 0 0; font-weight: 700; }
+
+  /* Cards appear one after another */
+  .cards:not(.is-out) .card { animation: card-in var(--slow) var(--ease-out) both; }
+  .cards:not(.is-out) .card:nth-child(2) { animation-delay: 60ms; }
+  .cards:not(.is-out) .card:nth-child(3) { animation-delay: 120ms; }
+  @keyframes card-in { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+
+  /* ---------- Plan switcher (Figma «Plan Switcher») ---------- */
+  .switch-wrap { display: flex; justify-content: center; margin-top: 32px; }
+  .switch {
+    position: relative;
+    display: inline-grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: 16px;
+    padding: 8px;
+    border-radius: 24px;
+    background: var(--section-grey);
+  }
+  .switch__pill {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    height: calc(100% - 16px);
+    border-radius: 16px;
+    background: var(--white);
+    transition: transform var(--slow) var(--ease-state), width var(--slow) var(--ease-state), height var(--slow) var(--ease-state);
+  }
+  .switch__btn {
+    position: relative;
+    z-index: 1;
+    min-height: 52px;
+    padding: 16px;
+    border: 0;
+    border-radius: 16px;
+    background: transparent;
+    color: var(--ink);
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .switch__btn:focus-visible { outline: 2px solid var(--indigo); outline-offset: 2px; }
+  .switch__btn[aria-checked='false'] { color: var(--secondary-text); }
+  .switch__btn[aria-checked='false']:hover { color: var(--indigo); }
+  @media (max-width: 599px) {
+    .switch-wrap { display: block; }
+    .switch { display: grid; grid-auto-flow: row; gap: 8px; width: 100%; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="spacer spacer--top" aria-hidden="true"></div>
+<section class="block" aria-labelledby="title">
+  <div class="block__inner">
+    <h2 class="block__title" id="title">Сколько стоит эффективное управление командировками?</h2>
+    <p class="block__subtitle">Подберём условия под вашу компанию или соберём тариф под ваши задачи</p>
+    <div class="stage" id="stage"><div class="cards" id="cards" aria-live="polite"></div></div>
+    <div class="switch-wrap">
+      <div class="switch" role="radiogroup" aria-label="Тип тарифа" id="switch">
+        <span class="switch__pill" id="pill" aria-hidden="true"></span>
+        <button class="switch__btn" type="button" role="radio" aria-checked="true" data-plan="subscription">С абонентской платой</button>
+        <button class="switch__btn" type="button" role="radio" aria-checked="false" data-plan="no-subscription">Без абонентской платы</button>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="spacer" aria-hidden="true"></div>
+
+<script>
+/* Copy: Figma component «Pricing» (4127:32304) and its instance on the «Посмотреть тарифы» page */
+const BASE = ['Оформление авиабилета — 1 ₽', 'Бронирование отелей — 0 ₽', 'Оформление билета на поезд — 135 ₽'];
+const PLANS = {
+  subscription: [
+    { sum: '1,500', items: BASE, terms: 'Предоплата' },
+    { sum: '3,000', items: [...BASE, 'Кредитный лимит — 100 000 ₽'], terms: 'Отсрочка 3 дня', accent: true },
+    { sum: '6,900', items: [...BASE, 'Кредитный лимит — 3 000 000 ₽'], terms: 'Отсрочка от 7 дней' },
+  ],
+  'no-subscription': [
+    { sum: '1,500', items: BASE, terms: 'Предоплата', accent: true },
+  ],
+};
+
+const stage = document.getElementById('stage');
+const cards = document.getElementById('cards');
+const pill = document.getElementById('pill');
+const buttons = [...document.querySelectorAll('.switch__btn')];
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const cardHTML = (p) => `
+  <article class="card${p.accent ? ' card--accent' : ''}">
+    <div class="card__top"><p class="card__price"><span class="card__sum">${p.sum}</span><span class="card__cur">₽</span><span class="card__per">в месяц</span></p></div>
+    <div class="card__bottom"><ul class="card__list">${p.items.map((i) => `<li>${i}</li>`).join('')}</ul><p class="card__terms">${p.terms}</p></div>
+  </article>`;
+
+function render(plan) {
+  const list = PLANS[plan];
+  cards.classList.toggle('cards--single', list.length === 1);
+  cards.innerHTML = list.map(cardHTML).join('');
+}
+
+function movePill() {
+  const active = buttons.find((b) => b.getAttribute('aria-checked') === 'true');
+  pill.style.width = `${active.offsetWidth}px`;
+  pill.style.height = `${active.offsetHeight}px`;
+  pill.style.transform = `translate(${active.offsetLeft - 8}px, ${active.offsetTop - 8}px)`;
+}
+
+let current = 'subscription';
+function choose(plan) {
+  if (plan === current) return;
+  current = plan;
+  buttons.forEach((b) => b.setAttribute('aria-checked', String(b.dataset.plan === plan)));
+  movePill();
+  if (reduced) { render(plan); return; }
+  // Smoothly change height while the cards swap
+  stage.style.height = `${stage.offsetHeight}px`;
+  cards.classList.add('is-out');
+  setTimeout(() => {
+    render(plan);
+    stage.style.height = `${cards.offsetHeight}px`;
+    requestAnimationFrame(() => cards.classList.remove('is-out'));
+    setTimeout(() => { stage.style.height = ''; }, 400);
+  }, 250);
+}
+
+render(current);
+document.fonts.ready.then(movePill);
+addEventListener('resize', movePill);
+document.getElementById('switch').addEventListener('click', (e) => {
+  const b = e.target.closest('.switch__btn');
+  if (b) choose(b.dataset.plan);
+});
+document.getElementById('switch').addEventListener('keydown', (e) => {
+  if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) return;
+  e.preventDefault();
+  const next = buttons.find((b) => b.dataset.plan !== current);
+  choose(next.dataset.plan); next.focus();
+});
+</script>
+</body>
+</html>
