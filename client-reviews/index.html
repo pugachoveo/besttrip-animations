@@ -76,11 +76,9 @@
   .row { overflow: hidden; }
   .track { display: flex; width: max-content; gap: 16px; padding-inline: 8px; will-change: transform; }
   .row[data-dir='left'] .track { animation: mq-left 48s linear infinite; }
-  .row[data-dir='right'] .track { animation: mq-right 48s linear infinite; }
   /* The marquee keeps moving under the cursor; it only pauses while a keyboard user tabs through logos */
   .rows:has(.logo:focus-visible) .track { animation-play-state: paused; }
   @keyframes mq-left { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-  @keyframes mq-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
 
   .logo {
     position: relative;
@@ -121,7 +119,6 @@
 
   /* ---------- Phone: one swipeable row instead of two marquees ---------- */
   @media (max-width: 599px) {
-    .row[data-dir='right'] { display: none; }
     .row { overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 16px; scrollbar-width: none; }
     .row::-webkit-scrollbar { display: none; }
     .row .track { animation: none !important; padding-inline: 16px; gap: 8px; }
@@ -162,11 +159,11 @@ const CLIENTS = [
 ];
 const logo = (id, c) => `../assets/logos/${id}-${c}.png`;
 
-/* Row 1 in Figma order, row 2 reversed; each set is repeated so the marquee loops seamlessly */
+/* One row in Figma order; the set is repeated so the marquee loops seamlessly */
 const tile = (c, clone) => `<button class="logo${clone ? ' is-clone' : ''}" type="button" data-id="${c.id}" aria-pressed="false"${clone ? ' tabindex="-1" aria-hidden="true"' : ''} aria-label="Отзыв: ${c.name}">
     <img class="is-grey" src="${logo(c.id, 'grey')}" alt=""><img class="is-color" src="${logo(c.id, 'color')}" alt=""></button>`;
 const row = (list, dir) => `<div class="row" data-dir="${dir}"><div class="track">${list.map((c) => tile(c, false)).join('')}${list.map((c) => tile(c, true)).join('')}</div></div>`;
-document.getElementById('rows').innerHTML = row(CLIENTS, 'left') + row([...CLIENTS].reverse(), 'right');
+document.getElementById('rows').innerHTML = row(CLIENTS, 'left');
 
 const card = document.getElementById('card');
 let current = null;
