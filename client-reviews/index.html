@@ -77,7 +77,8 @@
   .track { display: flex; width: max-content; gap: 16px; padding-inline: 8px; will-change: transform; }
   .row[data-dir='left'] .track { animation: mq-left 48s linear infinite; }
   .row[data-dir='right'] .track { animation: mq-right 48s linear infinite; }
-  .rows:hover .track, .rows:focus-within .track { animation-play-state: paused; }
+  /* The marquee keeps moving under the cursor; it only pauses while a keyboard user tabs through logos */
+  .rows:has(.logo:focus-visible) .track { animation-play-state: paused; }
   @keyframes mq-left { from { transform: translateX(0); } to { transform: translateX(-50%); } }
   @keyframes mq-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
 
