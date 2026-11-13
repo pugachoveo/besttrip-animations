@@ -115,23 +115,32 @@
   @media (min-width: 600px) {
     .block__inner { max-width: 720px; }
   }
-  /* Desktop: list 6/12 + illustration panel 6/12, stretched to the list height */
+  /* Desktop: list 6/12 + illustration panel 6/12 stretched to the list height; the image inside is sticky */
   @media (min-width: 1024px) {
     .block__inner { max-width: 1200px; }
     .block__content { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .block__content { align-items: stretch; }
     .illu {
-      display: flex;
+      display: block;
       min-height: 712px;
-      align-items: flex-end;
-      justify-content: center;
-      overflow: hidden;
+      /* clip, not hidden: hidden would make the panel a scroll container and break sticky */
+      overflow: clip;
       border-radius: 24px;
       background: var(--white);
     }
-    /* The exported PNG has purple rounded corners baked in (radius 32): cut the top strip
-       and round the bottom past that radius so no purple shows inside the white panel */
-    .illu img { display: block; width: 100%; height: auto; clip-path: inset(24px 0 0 0 round 0 0 36px 36px); }
+    /* The illustration rides along with the user while the list scrolls past */
+    .illu img {
+      position: sticky;
+      top: 24px;
+      display: block;
+      width: 100%;
+      height: auto;
+      /* The exported PNG has purple rounded corners baked in: cut the top strip,
+         and fade the bottom so the cropped desk edge never floats mid-panel */
+      clip-path: inset(24px 0 0 0);
+      -webkit-mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
+      mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -168,24 +177,21 @@ const ITEMS = [
 ];
 
 document.getElementById('cards').innerHTML = ITEMS.map((it, i) => `
-  <div class="card"${i === 0 ? ' data-open' : ''}>
-    <button class="card__head" type="button" id="h${i}" aria-expanded="${i === 0}" aria-controls="p${i}">
+  <div class="card">
+    <button class="card__head" type="button" id="h${i}" aria-expanded="false" aria-controls="p${i}">
       <span class="card__ico">${icon(it.icon)}</span><span class="card__title">${it.title}</span>${CHEV}
     </button>
     <div class="card__body" id="p${i}" role="region" aria-labelledby="h${i}"><div class="card__inner">${it.text.map((t) => `<p>${t}</p>`).join('')}</div></div>
   </div>`).join('');
 
-/* One item open at a time; clicking the open item closes it */
+/* Each item toggles on its own: any number can be open at once */
 document.getElementById('cards').addEventListener('click', (e) => {
   const head = e.target.closest('.card__head');
   if (!head) return;
   const card = head.closest('.card');
-  const wasOpen = card.hasAttribute('data-open');
-  document.querySelectorAll('.card').forEach((c) => {
-    c.removeAttribute('data-open');
-    c.querySelector('.card__head').setAttribute('aria-expanded', 'false');
-  });
-  if (!wasOpen) { card.setAttribute('data-open', ''); head.setAttribute('aria-expanded', 'true'); }
+  const open = !card.hasAttribute('data-open');
+  card.toggleAttribute('data-open', open);
+  head.setAttribute('aria-expanded', String(open));
 });
 </script>
 </body>

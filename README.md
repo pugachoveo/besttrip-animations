@@ -13,4 +13,4 @@
 
 ## Демо
 
-- [Собираем конференцию целиком](https://pugachoveo.github.io/besttrip-animations/conference-accordion/) — аккордеон, открыт один пункт за раз.
+- [Собираем конференцию целиком](https://pugachoveo.github.io/besttrip-animations/conference-accordion/) — аккордеон, пункты раскрываются независимо, иллюстрация едет при прокрутке.
