@@ -14,6 +14,7 @@
     --white: #ffffff;
     --ink: #17063c;
     --section-grey: #f1f3f9;
+    --grey-10: #e6ecf3;
     --indigo: #601df1;
     --fast: 150ms;
     --base: 250ms;
@@ -121,14 +122,43 @@
   .card__title { margin: 0 0 8px; font-size: var(--h4-size); line-height: var(--h4-lh); font-weight: 700; }
   .card__desc { margin: 0; }
 
-  /* ---------- Phone: one swipeable row instead of two marquees ---------- */
+  /* ---------- Progress bar under the swipe row (phone only) ---------- */
+  .progress { display: none; }
+
+  /* ---------- Phone: swipeable logo cards + progress bar (Figma Home/375 7963:128032) ---------- */
   @media (max-width: 599px) {
-    .row { overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 16px; scrollbar-width: none; }
+    .row { margin-inline: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
     .row::-webkit-scrollbar { display: none; }
-    .row .track { animation: none !important; padding-inline: 16px; gap: 8px; }
+    .row .track { animation: none !important; padding-inline: 0; gap: 8px; }
     .row .is-clone { display: none; }
-    .logo { width: 136px; height: 72px; scroll-snap-align: start; }
+    .logo {
+      width: 149px;
+      height: 80px;
+      border: 1px solid var(--grey-10);
+      border-radius: 16px;
+      background: var(--white);
+      scroll-snap-align: start;
+    }
     .logo img { width: 120px; height: 60px; }
+    .progress {
+      position: relative;
+      display: block;
+      height: 4px;
+      margin: 16px 16px 0;
+      overflow: hidden;
+      border-radius: 2px;
+      background: var(--grey-10);
+    }
+    .progress__thumb {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      border-radius: 2px;
+      background: var(--ink);
+      will-change: transform;
+    }
+    .card { margin-top: 24px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -144,6 +174,7 @@
 <section class="block" aria-labelledby="title">
   <h2 class="block__title" id="title">Что отмечают наши клиенты</h2>
   <div class="rows" id="rows"></div>
+  <div class="progress" aria-hidden="true"><div class="progress__thumb" id="thumb"></div></div>
   <div class="card" aria-live="polite">
     <div class="card__body" id="card"></div>
   </div>
@@ -170,6 +201,22 @@ const tile = (c, clone) => `<button class="logo${clone ? ' is-clone' : ''}" type
     <img class="is-grey" src="${logo(c.id, 'grey')}" alt=""><img class="is-color" src="${logo(c.id, 'color')}" alt=""></button>`;
 const row = (list, dir) => `<div class="row" data-dir="${dir}"><div class="track">${list.map((c) => tile(c, false)).join('')}${list.map((c) => tile(c, true)).join('')}</div></div>`;
 document.getElementById('rows').innerHTML = row(CLIENTS, 'left');
+
+/* Phone: the thumb shows how much of the logo row is visible and where it is scrolled to */
+const swipeRow = document.querySelector('.row');
+const thumb = document.getElementById('thumb');
+function syncThumb() {
+  const track = thumb.parentElement.clientWidth;
+  const ratio = swipeRow.clientWidth / swipeRow.scrollWidth;
+  const w = Math.max(48, track * ratio);
+  const max = swipeRow.scrollWidth - swipeRow.clientWidth;
+  const pos = max > 0 ? swipeRow.scrollLeft / max : 0;
+  thumb.style.width = `${w}px`;
+  thumb.style.transform = `translateX(${pos * (track - w)}px)`;
+}
+swipeRow.addEventListener('scroll', syncThumb, { passive: true });
+addEventListener('resize', syncThumb);
+syncThumb();
 
 const card = document.getElementById('card');
 let current = null;
