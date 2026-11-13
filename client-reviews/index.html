@@ -61,6 +61,10 @@
   }
   button { font: inherit; color: inherit; }
 
+  /* Empty grey sections around the block, as if it sat in the middle of a page */
+  .spacer { height: 100vh; background: var(--section-grey); }
+  .spacer--top { height: 240px; }
+
   .block { padding: var(--section-pad) 0; background: var(--white); }
   .block__title {
     margin: 0 16px var(--title-gap);
@@ -136,6 +140,7 @@
 </style>
 </head>
 <body>
+<div class="spacer spacer--top" aria-hidden="true"></div>
 <section class="block" aria-labelledby="title">
   <h2 class="block__title" id="title">Что отмечают наши клиенты</h2>
   <div class="rows" id="rows"></div>
@@ -143,6 +148,7 @@
     <div class="card__body" id="card"></div>
   </div>
 </section>
+<div class="spacer" aria-hidden="true"></div>
 
 <script>
 /* Copy: Figma node 7970:131900 «Отзывы» */
