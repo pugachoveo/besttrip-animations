@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<title>Как BestTrip помогает экономить — варианты блока</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="../assets/header.js" defer></script>
+<style>
+  /* Tokens: BestTrip design-system/tokens.css. Card metrics: design-system card component. */
+  :root {
+    --white: #ffffff;
+    --ink: #17063c;
+    --secondary-text: #4b5d73;
+    --section-grey: #f1f3f9;
+    --grey-40: #b5c2d0;
+    --indigo: #601df1;
+    --purple-light: #cfbbfb;
+    --purple-light-10: #efe8fe;
+    --purple-light-20: #dfd2fc;
+    --mint: #76e3cf;
+    --fast: 150ms; --base: 250ms; --slow: 350ms;
+    --ease-out: ease-out; --ease-state: ease-in-out;
+
+    /* mobile (<600) */
+    --h2: 28px; --h2-lh: 36px; --h2-ls: 0;
+    --h3: 24px; --h3-lh: 32px;
+    --pad: 32px; --gutter: 16px;
+    --card-pad: 24px; --card-radius: 24px;
+  }
+  @media (min-width: 600px) {
+    :root { --h2: 32px; --h2-lh: 40px; --h2-ls: 0.32px; --pad: 48px; --gutter: 24px; --card-pad: 32px; }
+  }
+  @media (min-width: 1024px) {
+    :root { --h2: 40px; --h2-lh: 48px; --h2-ls: 0.4px; --h3: 32px; --h3-lh: 40px; --pad: 64px; --gutter: 32px; --card-radius: 32px; }
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  html, body { margin: 0; }
+  body {
+    background: var(--white); color: var(--ink);
+    font-family: 'Montserrat', Arial, sans-serif; font-size: 16px; line-height: 22px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: calc(1200px + var(--gutter) * 2); margin: 0 auto; padding: 0 var(--gutter); }
+
+  /* ---------- Навигация по вариантам ---------- */
+  .variants-nav {
+    position: sticky; top: 0; z-index: 5;
+    padding: 12px 0; background: var(--section-grey);
+  }
+  .variants-nav ul {
+    display: flex; gap: 8px; margin: 0; padding: 0; list-style: none;
+    overflow-x: auto; scrollbar-width: none;
+  }
+  .variants-nav a {
+    display: inline-flex; min-height: 38px; align-items: center;
+    border-radius: 48px; padding: 8px 16px;
+    background: var(--white); color: var(--indigo);
+    font-size: 14px; font-weight: 600; line-height: 22px; text-decoration: none; white-space: nowrap;
+    transition: background-color var(--fast) var(--ease-state);
+  }
+  .variants-nav a:hover { background: var(--purple-light-20); }
+  .variants-nav a:focus-visible { outline: 2px solid var(--indigo); outline-offset: 2px; }
+
+  /* ---------- Подпись варианта ---------- */
+  .label { padding: var(--pad) 0 0; text-align: center; scroll-margin-top: 80px; }
+  .label__tag { display: inline-block; margin: 0 0 8px; color: var(--indigo); font-size: 14px; font-weight: 600; line-height: 20px; }
+  .label__text { max-width: 592px; margin: 0 auto; color: var(--secondary-text); }
+  .divider { height: 1px; margin-top: var(--pad); background: var(--grey-40); opacity: .5; }
+
+  /* ---------- Общий блок ---------- */
+  .block { padding: var(--pad) 0; }
+  .heading { display: flex; flex-direction: column; gap: 16px; text-align: center; }
+  .heading h2 { margin: 0; font-size: var(--h2); line-height: var(--h2-lh); letter-spacing: var(--h2-ls); font-weight: 700; }
+  .heading p { max-width: 900px; margin: 0 auto; }
+  .body { margin-top: 24px; }
+  @media (min-width: 600px) { .body { margin-top: 32px; } }
+
+  /* ---------- Карточка (design-system card, vertical, grey) ---------- */
+  .card {
+    display: flex; flex-direction: column; gap: 16px;
+    border-radius: var(--card-radius); padding: var(--card-pad);
+    background: var(--section-grey);
+  }
+  .badge { display: grid; width: 40px; height: 40px; flex: 0 0 auto; place-items: center; border-radius: 16px; background: var(--purple-light-20); }
+  .ico { display: block; width: 24px; height: 24px; background: var(--indigo); mask: var(--icon) center / contain no-repeat; -webkit-mask: var(--icon) center / contain no-repeat; }
+  .card h3, .card h4 { margin: 0; font-size: 20px; line-height: 26px; font-weight: 700; }
+  .card p { margin: 8px 0 0; }
+
+  /* Слот иллюстрации с мятным полукругом (заглушка) */
+  .art {
+    position: relative; overflow: hidden; min-height: 220px;
+    display: grid; place-items: end center;
+  }
+  .art::before {
+    position: absolute; left: 50%; top: 24px;
+    width: 140%; aspect-ratio: 1; border-radius: 50%;
+    background: var(--mint); content: ''; transform: translateX(-50%);
+  }
+  .art span {
+    position: relative; margin-bottom: 24px; padding: 4px 12px; border-radius: 48px;
+    background: var(--white); color: var(--secondary-text); font-size: 13px; line-height: 16px; font-weight: 500;
+  }
+
+  .grid { display: grid; gap: 16px; }
+  @media (min-width: 600px) { .grid-2, .grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 1024px) { .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+
+  /* ---------- C. Широкая карточка + 2×4 ---------- */
+  .wide { display: grid; overflow: hidden; border-radius: var(--card-radius); background: var(--section-grey); margin-bottom: 16px; }
+  .wide .card { background: transparent; }
+  .wide .art { min-height: 200px; }
+  @media (min-width: 1024px) {
+    .wide { grid-template-columns: minmax(0, 389px) minmax(0, 1fr); }
+    .wide .art { min-height: 280px; }
+  }
+
+  /* ---------- D. Этапы поездки ---------- */
+  .route { position: relative; display: none; height: 72px; margin-bottom: 24px; }
+  .route__line {
+    position: absolute; left: calc(100% / 6); right: calc(100% / 6); top: 35px;
+    border-top: 2px dashed var(--purple-light);
+  }
+  .route__line--done {
+    border-top-color: var(--indigo);
+    clip-path: inset(0 100% 0 0);
+  }
+  .route__pin {
+    position: absolute; top: 20px; width: 32px; height: 32px; margin-left: -16px;
+    display: grid; place-items: center; border-radius: 50%;
+    background: var(--purple-light-20); color: var(--indigo);
+    font-size: 14px; font-weight: 700;
+    transition: background-color var(--base) var(--ease-out), color var(--base) var(--ease-out);
+  }
+  .route__pin.is-on { background: var(--indigo); color: var(--white); }
+  .route__plane {
+    position: absolute; top: 24px; left: calc(100% / 6); width: 24px; height: 24px; margin-left: -12px;
+    fill: var(--indigo); transform: rotate(90deg); opacity: 0;
+  }
+  .stages { display: grid; gap: 32px; }
+  .stage { position: relative; display: flex; flex-direction: column; gap: 16px; }
+  .stage__title { display: flex; align-items: center; gap: 12px; margin: 0; font-size: var(--h3); line-height: var(--h3-lh); font-weight: 700; }
+  .stage__num {
+    display: grid; width: 32px; height: 32px; flex: 0 0 auto; place-items: center; border-radius: 50%;
+    background: var(--indigo); color: var(--white); font-size: 14px; line-height: 20px;
+  }
+  /* мобильный/планшет: вертикальная линия слева */
+  .stage::before {
+    position: absolute; left: 15px; top: 40px; bottom: -32px;
+    border-left: 2px dashed var(--purple-light); content: '';
+  }
+  .stage:last-child::before { display: none; }
+  .stage .stack { display: grid; gap: 16px; padding-left: 44px; }
+  @media (min-width: 1024px) {
+    .route { display: block; }
+    /* Столбики одной высоты: заголовок и три карточки лежат в общих рядах (subgrid),
+       поэтому карточки одного ряда равны по высоте во всех трёх колонках */
+    .stages { grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: auto repeat(3, auto); gap: 16px; }
+    .stage { display: grid; grid-row: span 4; grid-template-rows: subgrid; gap: 16px; }
+    .stage .stack { display: contents; }
+    .stage::before { display: none; }
+    .stage__num { display: none; }
+    .stage__title { justify-content: center; }
+    .stage .stack { padding-left: 0; }
+  }
+  /* анимация маршрута (только десктоп) */
+  .js #variant-d .stage { opacity: .35; transition: opacity var(--slow) var(--ease-out); }
+  .js #variant-d .stage.is-on { opacity: 1; }
+  @media (max-width: 1023px) { .js #variant-d .stage { opacity: 1; } }
+  #variant-d.is-run .route__line--done { animation: draw 1800ms linear forwards; }
+  #variant-d.is-run .route__plane { animation: fly 1800ms linear forwards; }
+  @keyframes draw { to { clip-path: inset(0 0 0 0); } }
+  @keyframes fly {
+    0% { left: calc(100% / 6); opacity: 0; }
+    8% { opacity: 1; }
+    92% { opacity: 1; }
+    100% { left: calc(100% * 5 / 6); opacity: 0; }
+  }
+
+  /* ---------- E. Вкладки (Plan Switcher из демки «Тарифы») ---------- */
+  .switch-wrap { display: flex; justify-content: center; margin-bottom: 32px; }
+  .switch {
+    position: relative; display: inline-grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 16px;
+    padding: 8px; border-radius: 24px; background: var(--section-grey);
+  }
+  .switch__pill {
+    position: absolute; top: 8px; left: 8px; height: calc(100% - 16px); border-radius: 16px; background: var(--white);
+    transition: transform var(--slow) var(--ease-state), width var(--slow) var(--ease-state), height var(--slow) var(--ease-state);
+  }
+  .switch__btn {
+    position: relative; z-index: 1; min-height: 52px; padding: 16px; border: 0; border-radius: 16px;
+    background: transparent; color: var(--ink); font: 700 14px/20px 'Montserrat', Arial, sans-serif; white-space: nowrap; cursor: pointer;
+  }
+  .switch__btn:focus-visible { outline: 2px solid var(--indigo); outline-offset: 2px; }
+  .switch__btn[aria-selected='false'] { color: var(--secondary-text); }
+  .switch__btn[aria-selected='false']:hover { color: var(--indigo); }
+  .tab-panel { animation: panel-in var(--slow) var(--ease-out); }
+  @keyframes panel-in { from { opacity: 0; transform: translateY(12px); } }
+  @media (max-width: 599px) {
+    .switch-wrap { display: block; }
+    .switch { display: grid; grid-auto-flow: row; gap: 8px; width: 100%; }
+  }
+
+  /* ---------- F. Аккордеон + sticky-иллюстрация ---------- */
+  .split { display: grid; gap: 16px; }
+  .split__art { border-radius: var(--card-radius); background: var(--section-grey); overflow: hidden; }
+  .split__art .art { min-height: 240px; }
+  .acc { display: grid; gap: 8px; }
+  .acc__item { border-radius: var(--card-radius); background: var(--section-grey); }
+  .acc__btn {
+    display: flex; width: 100%; align-items: center; gap: 16px;
+    padding: 16px var(--card-pad); border: 0; border-radius: var(--card-radius);
+    background: transparent; color: var(--ink); text-align: left; cursor: pointer;
+    font: 700 18px/24px 'Montserrat', Arial, sans-serif;
+  }
+  .acc__btn:focus-visible { outline: 2px solid var(--indigo); outline-offset: 2px; }
+  .acc__btn > span:nth-child(2) { flex: 1 1 auto; }
+  .acc__chev {
+    width: 24px; height: 24px; flex: 0 0 auto; background: var(--ink);
+    mask: url(../assets/header/chevron-down.svg) center / 24px no-repeat;
+    -webkit-mask: url(../assets/header/chevron-down.svg) center / 24px no-repeat;
+    transition: transform var(--base) var(--ease-state);
+  }
+  .acc__btn[aria-expanded='true'] .acc__chev { transform: rotate(180deg); }
+  .acc__panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows var(--slow) var(--ease-state); }
+  .acc__panel > div { overflow: hidden; }
+  .acc__panel p { margin: 0; padding: 0 var(--card-pad) 24px calc(var(--card-pad) + 56px); }
+  .acc__btn[aria-expanded='true'] + .acc__panel { grid-template-rows: 1fr; }
+  @media (min-width: 1024px) {
+    .split { grid-template-columns: 5fr 7fr; align-items: start; }
+    .split__art { position: sticky; top: 96px; }
+    .split__art .art { min-height: 480px; }
+  }
+  @media (max-width: 599px) { .acc__panel p { padding-left: var(--card-pad); } }
+
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { transition: none !important; animation: none !important; }
+    .js #variant-d .stage { opacity: 1; }
+    .route__line--done { clip-path: none !important; }
+  }
+</style>
+</head>
+<body>
+<script>document.documentElement.classList.add('js');</script>
+
+<nav class="variants-nav" aria-label="Варианты блока">
+  <div class="container">
+    <ul>
+      <li><a href="#v1">1 · Этапы поездки</a></li>
+      <li><a href="#v2">2 · Вкладки</a></li>
+      <li><a href="#v3">3 · Аккордеон</a></li>
+      <li><a href="#v4">4 · Акцент + 2×4</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main id="variants"></main>
+
+<template id="tpl-heading">
+  <div class="heading">
+    <h2>Как BestTrip помогает экономить</h2>
+    <p>Мы помогаем компаниям тратить меньше на командировки — за счёт контроля, автоматизации и устранения лишних расходов на каждом этапе поездки</p>
+  </div>
+</template>
+
+<script>
+(function () {
+  const I = (n) => `url(img/${n}.svg)`;
+  const items = {
+    admin:   { t: 'Снижаем административные затраты', d: 'Убираем ручную работу с билетами, отчётами и чеками. Сотрудники и бухгалтерия тратят меньше времени на оформление командировок — меньше операционных затрат для компании', i: 'receipt-long' },
+    changes: { t: 'Снижаем потери на изменениях и отменах', d: 'Быстро помогаем переоформить или отменить поездки, чтобы уменьшить расходы на неиспользованные билеты и отели', i: 'event-busy' },
+    clear:   { t: 'Делаем все расходы прозрачными', d: 'Все траты по командировкам видны в одном месте. Проще понимать, куда уходит бюджет и где можно экономить', i: 'visibility' },
+    support: { t: 'Снижаем затраты на поддержку поездок', d: 'Быстро помогаем сотрудникам в поездках, чтобы избежать дорогих ошибок при изменениях или срочных ситуациях', i: 'support-agent' },
+    docs:    { t: 'Документы и справки — бесплатно', d: 'Справки о перелётах и нужные документы для бухгалтерии формируются без оплаты и лишних запросов', i: 'description' },
+    overpay: { t: 'Предотвращаем переплаты при бронировании', d: 'Можем показывать только варианты, соответствующие бюджету и правилам компании, либо оставлять полный выбор — в зависимости от ваших пожеланий. Это помогает контролировать стоимость поездки ещё до оплаты', i: 'price-check' },
+    policy:  { t: 'Исключаем нецелевые и избыточные расходы', d: 'Контроль тревел-политики помогает ограничивать дорогие классы, неподходящие тарифы и нарушения корпоративных правил — снижая риск лишних трат', i: 'policy' },
+    voiding: { t: 'Снижаем потери в нестандартных ситуациях (войдирование)', d: 'В отдельных случаях можно вернуть деньги даже за невозвратные тарифы — по правилам авиакомпаний. Это помогает не терять бюджет при срочных изменениях планов', i: 'published-with-changes' },
+    fares:   { t: 'Поддерживаем деловые проездные и корпоративные тарифы', d: 'Помогаем использовать корпоративные условия и скидки авиакомпаний (например, Аэрофлота), чтобы снижать стоимость регулярных командировок', i: 'percent-discount' },
+  };
+  const order = ['admin', 'overpay', 'changes', 'policy', 'clear', 'voiding', 'support', 'fares', 'docs'];
+  const themes = [
+    ['Контроль', ['overpay', 'policy', 'clear']],
+    ['Автоматизация', ['admin', 'docs', 'support']],
+    ['Без лишних потерь', ['changes', 'voiding', 'fares']],
+  ];
+  const stages = [
+    ['До поездки', ['overpay', 'policy', 'fares']],
+    ['В поездке', ['changes', 'support', 'voiding']],
+    ['После поездки', ['docs', 'clear', 'admin']],
+  ];
+
+  const badge = (k) => `<span class="badge"><i class="ico" style="--icon:${I(items[k].i)}"></i></span>`;
+  const card = (k, h = 'h3') => `<article class="card">${badge(k)}<div><${h}>${items[k].t}</${h}><p>${items[k].d}</p></div></article>`;
+  const art = (label) => `<div class="art" aria-hidden="true">${label ? `<span>${label}</span>` : ''}</div>`;
+  const heading = document.getElementById('tpl-heading').innerHTML;
+
+  const variants = [
+    { id: 'd', anchor: 'v1', tag: 'Вариант 1 · Этапы поездки', text: 'Карточки разложены по хронологии поездки. На десктопе самолётик пролетает по маршруту, этапы загораются по очереди.',
+      html: `<div class="route" aria-hidden="true">
+               <div class="route__line"></div><div class="route__line route__line--done"></div>
+               <span class="route__pin" style="left:calc(100%/6)">1</span>
+               <span class="route__pin" style="left:50%">2</span>
+               <span class="route__pin" style="left:calc(100%*5/6)">3</span>
+               <svg class="route__plane" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/></svg>
+             </div>
+             <div class="stages">${stages.map(([t, ks], n) => `<section class="stage"><h3 class="stage__title"><span class="stage__num">${n + 1}</span>${t}</h3><div class="stack">${ks.map((k) => card(k, 'h4')).join('')}</div></section>`).join('')}</div>` },
+    { id: 'e', anchor: 'v2', tag: 'Вариант 2 · Вкладки', text: 'Переключатель по темам (как в демке «Тарифы»). Блок в три раза короче, но две трети пунктов скрыты.',
+      html: `<div class="switch-wrap"><div class="switch" role="tablist" aria-label="Темы" id="tabs">
+               <span class="switch__pill" aria-hidden="true"></span>
+               ${themes.map(([t], n) => `<button class="switch__btn" type="button" role="tab" id="tab-${n}" aria-controls="tabpanel" aria-selected="${n === 0}">${t}</button>`).join('')}
+             </div></div>
+             <div id="tabpanel" role="tabpanel" aria-labelledby="tab-0"></div>` },
+    { id: 'f', anchor: 'v3', tag: 'Вариант 3 · Аккордеон', text: 'Слева одна крупная иллюстрация едет при прокрутке, справа список: описание раскрывается по клику. Паттерн из демки «Конференции».',
+      html: `<div class="split"><div class="split__art">${art('Иллюстрация: копилка или графики')}</div>
+             <div class="acc">${order.map((k, n) => `<div class="acc__item"><button class="acc__btn" type="button" aria-expanded="${n === 0}" aria-controls="acc-${n}">${badge(k)}<span>${items[k].t}</span><i class="acc__chev" aria-hidden="true"></i></button><div class="acc__panel" id="acc-${n}"><div><p>${items[k].d}</p></div></div></div>`).join('')}</div></div>` },
+    { id: 'c', anchor: 'v4', tag: 'Вариант 4 · Акцентная карточка + 2×4', text: 'Одна широкая карточка с иллюстрацией задаёт акцент, под ней восемь карточек парами.',
+      html: `<div class="wide">${card('clear')}${art('')}</div><div class="grid grid-2">${order.filter((k) => k !== 'clear').map((k) => card(k)).join('')}</div>` },
+  ];
+
+  document.getElementById('variants').innerHTML = variants.map((v) => `
+    <div class="label" id="${v.anchor}"><div class="container">
+      <p class="label__tag">${v.tag}</p><p class="label__text">${v.text}</p>
+      <div class="divider"></div>
+    </div></div>
+    <section class="block" id="variant-${v.id}" aria-label="${v.tag}"><div class="container">
+      ${heading}<div class="body">${v.html}</div>
+    </div></section>`).join('');
+
+  /* ---- E: вкладки ---- */
+  const tabs = [...document.querySelectorAll('#tabs .switch__btn')];
+  const pill = document.querySelector('#tabs .switch__pill');
+  const panel = document.getElementById('tabpanel');
+  const movePill = () => {
+    const a = tabs.find((t) => t.getAttribute('aria-selected') === 'true');
+    pill.style.width = a.offsetWidth + 'px';
+    pill.style.height = a.offsetHeight + 'px';
+    pill.style.transform = `translate(${a.offsetLeft - 8}px, ${a.offsetTop - 8}px)`;
+  };
+  const showTab = (n) => {
+    tabs.forEach((t, i) => { t.setAttribute('aria-selected', String(i === n)); t.tabIndex = i === n ? 0 : -1; });
+    panel.setAttribute('aria-labelledby', 'tab-' + n);
+    panel.innerHTML = `<div class="tab-panel grid grid-3">${themes[n][1].map((k) => card(k)).join('')}</div>`;
+    movePill();
+  };
+  tabs.forEach((t, n) => t.addEventListener('click', () => showTab(n)));
+  document.getElementById('tabs').addEventListener('keydown', (e) => {
+    const cur = tabs.findIndex((t) => t.getAttribute('aria-selected') === 'true');
+    const d = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 0;
+    if (!d) return;
+    e.preventDefault();
+    const n = (cur + d + tabs.length) % tabs.length;
+    showTab(n); tabs[n].focus();
+  });
+  showTab(0);
+  addEventListener('resize', movePill);
+  document.fonts && document.fonts.ready.then(movePill);
+
+  /* ---- F: аккордеон, пункты раскрываются независимо ---- */
+  document.querySelectorAll('.acc__btn').forEach((b) => b.addEventListener('click', () => {
+    b.setAttribute('aria-expanded', String(b.getAttribute('aria-expanded') !== 'true'));
+  }));
+
+  /* ---- D: маршрут ---- */
+  const d = document.getElementById('variant-d');
+  const stageEls = [...d.querySelectorAll('.stage')];
+  const pins = [...d.querySelectorAll('.route__pin')];
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const lightAll = () => { stageEls.forEach((s) => s.classList.add('is-on')); pins.forEach((p) => p.classList.add('is-on')); };
+  if (reduced || !('IntersectionObserver' in window)) { lightAll(); }
+  else {
+    const io = new IntersectionObserver((es) => {
+      if (!es.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      d.classList.add('is-run');
+      // этап загорается, когда самолётик долетает до его точки (0 / 900 / 1800 мс)
+      [0, 900, 1800].forEach((t, n) => setTimeout(() => { stageEls[n].classList.add('is-on'); pins[n].classList.add('is-on'); }, t));
+    }, { threshold: 0.3 });
+    io.observe(d);
+  }
+})();
+</script>
+</body>
+</html>

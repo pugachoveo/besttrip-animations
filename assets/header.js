@@ -20,6 +20,7 @@
       items: [
         { label: 'Отзывы и Кейсы', href: 'client-reviews/' },
         { label: 'Посмотреть тарифы', href: 'pricing/' },
+        { label: 'Экономия: варианты блока', href: 'savings-help-variants/' },
       ],
     },
   ];
