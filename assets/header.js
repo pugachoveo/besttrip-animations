@@ -6,6 +6,7 @@
    hrefs are relative to the site root. */
 (function () {
   const NAV = [
+    { id: 'home', label: 'Главная', href: 'home-hero/' },
     {
       id: 'mice',
       label: 'MICE',

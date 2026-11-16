@@ -14,6 +14,7 @@
 
 ## Демо
 
+- [Первый экран главной](https://pugachoveo.github.io/besttrip-animations/home-hero/) — самолёт влетает в кадр, форма собирается по очереди, значки доверия появляются за самолётом; на 375 своя раскладка с полосой «глобус + самолёт».
 - [Собираем конференцию целиком](https://pugachoveo.github.io/besttrip-animations/conference-accordion/) — аккордеон, пункты раскрываются независимо, карточка с иллюстрацией едет при прокрутке.
 - [Что отмечают наши клиенты](https://pugachoveo.github.io/besttrip-animations/client-reviews/) — лента логотипов и карточка отзыва.
 - [Тарифы](https://pugachoveo.github.io/besttrip-animations/pricing/) — переключатель тарифов с абонентской платой и без.

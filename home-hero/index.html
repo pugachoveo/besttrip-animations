@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Первый экран главной — BestTrip</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="../assets/header.js" defer></script>
+<style>
+  /* Tokens: BestTrip design-system/tokens.css. Layout: Figma Home/Hero 7485:141081 (1440), 7984:132033 (375). */
+  :root {
+    --white: #ffffff;
+    --ink: #17063c;
+    --section-grey: #f1f3f9;
+    --grey-40: #b5c2d0;
+    --grey-60: #8496ab;
+    --indigo: #601df1;
+    --primary-purple: #4611ba;
+    --purple-light: #cfbbfb;
+    --purple-light-10: #efe8fe;
+    --purple-light-20: #dfd2fc;
+    --indigo-alpha-20: rgba(96, 29, 241, 0.2);
+    --fast: 150ms;
+    --base: 250ms;
+    --ease-out: ease-out;
+    --ease-state: ease-in-out;
+
+    /* mobile (<600) */
+    --title: 28px; --title-lh: 36px; --title-ls: 0;
+    --sub: 18px; --sub-lh: 26px;
+  }
+  @media (min-width: 600px) {
+    :root { --title: 32px; --title-lh: 40px; --title-ls: 0.32px; }
+  }
+  @media (min-width: 1024px) {
+    :root { --title: 40px; --title-lh: 48px; --title-ls: 0.4px; --sub: 20px; --sub-lh: 28px; }
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--white);
+    color: var(--ink);
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-size: 16px;
+    line-height: 22px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; overflow: hidden;
+    clip: rect(0, 0, 0, 0); clip-path: inset(50%); white-space: nowrap;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    --k: 0.35; --k-plane: 0.45; --mx: 0; --my: 0;
+    position: relative;
+    overflow: hidden;
+    padding-bottom: 64px;
+    background: var(--white);
+  }
+  /* Hero3_bottom: скруглённый верх следующего фиолетового блока */
+  .hero::after {
+    position: absolute; z-index: 2; right: 0; bottom: 0; left: 0;
+    height: 64px; border-radius: 48px 48px 0 0;
+    background: var(--indigo); content: '';
+  }
+  .next { min-height: 240px; padding: 32px 16px; background: var(--indigo); text-align: center; }
+
+  .content {
+    position: relative; z-index: 1;
+    max-width: 1200px; margin: 0 auto;
+    padding: 8px 16px 48px;
+  }
+  .heading { display: flex; flex-direction: column; gap: 8px; text-align: center; }
+  .title {
+    margin: 0; color: var(--indigo);
+    font-size: var(--title); line-height: var(--title-lh); letter-spacing: var(--title-ls); font-weight: 700;
+  }
+  .wordmark { display: block; font-size: 36px; line-height: 44px; }
+  .subtitle { margin: 0; font-size: var(--sub); line-height: var(--sub-lh); }
+
+  .form { display: flex; flex-direction: column; max-width: 592px; margin: 24px auto 0; }
+  .fields { display: grid; grid-template-columns: 1fr; gap: 8px; }
+  .field input {
+    display: block; width: 100%; height: 64px;
+    border: 0; border-radius: 16px; padding: 20px 16px;
+    background: var(--section-grey); color: var(--ink);
+    font: inherit;
+  }
+  .field input::placeholder { color: var(--grey-60); opacity: 1; }
+  .field input:focus-visible { outline: 2px solid var(--indigo); outline-offset: 2px; }
+
+  .trips { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; margin-top: 8px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    min-height: 30px; border: 0; border-radius: 48px; padding: 4px 12px;
+    background: var(--section-grey); color: var(--ink);
+    font: 500 13px/22px 'Montserrat', Arial, sans-serif;
+    cursor: pointer;
+    transition: background-color var(--fast) var(--ease-state), color var(--fast) var(--ease-state);
+  }
+  .chip:hover { background: var(--purple-light-20); color: var(--indigo); }
+  .chip[aria-pressed='true'] { background: var(--purple-light-10); color: var(--indigo); }
+  .chip:focus-visible { outline: 2px solid var(--indigo); outline-offset: 2px; }
+
+  .buttons { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 24px; }
+  .btn {
+    display: inline-flex; height: 64px; align-items: center; justify-content: center;
+    border: 0; border-radius: 16px; padding: 16px 24px;
+    font: 600 18px/24px 'Montserrat', Arial, sans-serif; white-space: nowrap; cursor: pointer;
+    transition: background-color var(--fast) var(--ease-state), border-color var(--fast) var(--ease-state), color var(--fast) var(--ease-state);
+  }
+  .btn:focus-visible { outline: 2px solid var(--indigo); outline-offset: 2px; }
+  .btn--primary { background: var(--indigo); color: var(--white); }
+  .btn--primary:hover { background: var(--purple-light); color: var(--indigo); }
+  .btn--outline { border: 1px solid var(--indigo); background: transparent; color: var(--indigo); }
+  .btn--outline:hover { background: var(--indigo-alpha-20); color: var(--primary-purple); }
+  .btn--white { height: 48px; border-radius: 12px; padding: 12px 24px; background: var(--white); color: var(--indigo); font-size: 16px; }
+  .btn--white:hover { background: var(--purple-light); }
+
+  .consent { display: flex; justify-content: flex-start; margin-top: 16px; }
+  .checkbox { position: relative; display: flex; align-items: center; gap: 12px; cursor: pointer; }
+  .checkbox input { position: absolute; inset: 0; margin: 0; opacity: 0; cursor: pointer; }
+  .checkbox__box {
+    display: grid; width: 24px; height: 24px; flex: 0 0 24px; place-items: center;
+    border: 2px solid var(--grey-40); border-radius: 8px;
+    transition: background-color var(--fast) var(--ease-state), border-color var(--fast) var(--ease-state);
+  }
+  .checkbox__box img { width: 16px; height: 16px; opacity: 0; }
+  .checkbox input:checked + .checkbox__box { border-color: var(--indigo); background: var(--indigo); }
+  .checkbox input:checked + .checkbox__box img { opacity: 1; }
+  .checkbox input:focus-visible + .checkbox__box { outline: 2px solid var(--indigo); outline-offset: 2px; }
+  .checkbox__label { position: relative; font-size: 14px; line-height: 20px; }
+  .checkbox__label a { position: relative; z-index: 1; color: var(--indigo); text-decoration: underline; text-underline-offset: 2px; }
+
+  .badges {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    max-width: 592px; margin: 16px auto 0; padding: 0; list-style: none;
+  }
+  .badge { display: inline-flex; align-items: center; gap: 12px; font-size: 14px; line-height: 24px; }
+
+  /* ---------- Иллюстрации ---------- */
+  .art { position: absolute; z-index: 0; pointer-events: none; }
+  .art img { display: block; width: 100%; height: auto; }
+  /* Обрезанные края заходят за экран на запас параллакса и покачивания */
+  .plane { display: none; top: calc(47px * var(--k-plane)); left: -20px; width: calc(273px * var(--k-plane)); }
+  .globe { display: none; bottom: 0; left: -8px; width: calc(367px * var(--k)); }
+  .man { display: none; right: -12px; bottom: 0; width: calc(453px * var(--k)); }
+  .woman { display: none; right: -8px; bottom: 0; width: calc(621px * var(--k)); }
+
+  /* 375: полоса с глобусом и самолётом над заголовком */
+  .band { position: relative; height: 176px; }
+  .earth-m { top: 0; right: 0; width: 167px; }
+  .plane-m { top: 13px; right: -4px; width: 303px; }
+
+  .parallax { transition: transform var(--base) var(--ease-out); }
+  .plane .parallax { transform: translate(calc(var(--mx) * -16px), calc(var(--my) * -10px)); }
+  .globe .parallax { transform: translate(calc(var(--mx) * -6px), calc(var(--my) * -4px)); }
+  .man .parallax { transform: translate(calc(var(--mx) * 12px), calc(var(--my) * 6px)); }
+  .woman .parallax { transform: translate(calc(var(--mx) * 8px), calc(var(--my) * 4px)); }
+
+  /* ---------- Анимация ----------
+     0–840     заголовок, поля, чипсы, кнопки, согласие — по очереди, шаг 60
+     0–1200    самолёт влетает на своё место
+     200–750   глобус и пара выезжают
+     1000–1550 значки доверия проявляются за самолётом
+     1500      «Попробовать бесплатно» один раз «подпрыгивает»
+     дальше    иллюстрации медленно «дышат», параллакс за курсором */
+  .hero[data-play='idle'] .enter,
+  .hero[data-play='idle'] .reveal,
+  .hero[data-play='idle'] .badge { opacity: 0; }
+
+  .hero[data-play='run'] .reveal { animation: reveal 300ms var(--ease-out) both; animation-delay: calc(var(--step) * 60ms); }
+  .hero[data-play='run'] .plane .enter { animation: plane-in 1200ms cubic-bezier(0.2, 0.7, 0.3, 1) both; }
+  .hero[data-play='run'] .globe .enter { animation: enter-left 400ms var(--ease-out) 200ms both; }
+  .hero[data-play='run'] .man .enter { animation: enter-up 400ms var(--ease-out) 250ms both; }
+  .hero[data-play='run'] .woman .enter { animation: enter-up 400ms var(--ease-out) 350ms both; }
+  .hero[data-play='run'] .earth-m .enter { animation: enter-earth 400ms var(--ease-out) 100ms both; }
+  .hero[data-play='run'] .plane-m .enter { animation: plane-in-mobile 1000ms cubic-bezier(0.2, 0.7, 0.3, 1) both; }
+  .hero[data-play='run'] .badge { animation: badge-in var(--base) var(--ease-out) both; animation-delay: calc(1000ms + var(--i) * 150ms); }
+  .hero[data-play='run'] .btn--primary { animation: bump 300ms var(--ease-state) 1500ms; }
+
+  .hero[data-play='run'] .plane .float { transform-origin: 30% 60%; animation: float-plane 6s var(--ease-state) 1200ms infinite alternate; }
+  .hero[data-play='run'] .globe .float { transform-origin: 0 50%; animation: breathe 8s var(--ease-state) 600ms infinite alternate; }
+  .hero[data-play='run'] .man .float { animation: sway 7s var(--ease-state) 650ms infinite alternate; }
+  .hero[data-play='run'] .woman .float { animation: sway-small 5.5s var(--ease-state) 750ms infinite alternate; }
+  .hero[data-play='run'] .plane-m .float { transform-origin: 60% 50%; animation: float-plane-mobile 6s var(--ease-state) 1000ms infinite alternate; }
+
+  @keyframes reveal { from { opacity: 0; transform: translateY(12px); } }
+  @keyframes plane-in { from { opacity: 0; transform: translate(-420px, 260px) rotate(10deg); } 25% { opacity: 1; } }
+  @keyframes plane-in-mobile { from { opacity: 0; transform: translate(220px, 120px) rotate(-6deg); } 25% { opacity: 1; } }
+  @keyframes enter-left { from { opacity: 0; transform: translateX(-40px); } }
+  @keyframes enter-up { from { opacity: 0; transform: translateY(40px); } }
+  @keyframes enter-earth { from { opacity: 0; transform: translate(24px, -24px); } }
+  @keyframes badge-in { from { opacity: 0; transform: translateY(8px); } }
+  @keyframes bump { 50% { transform: scale(1.04); } }
+  @keyframes float-plane { to { transform: translateY(-10px) rotate(-1.5deg); } }
+  @keyframes float-plane-mobile { to { transform: translateY(-6px) rotate(1deg); } }
+  @keyframes breathe { to { transform: scale(1.02); } }
+  @keyframes sway { to { transform: translateY(-8px); } }
+  @keyframes sway-small { to { transform: translateY(-5px); } }
+
+  /* ---------- Брейкпоинты ---------- */
+  @media (min-width: 600px) {
+    .hero { --k: 0.6; --k-plane: 0.45; }
+    .band { display: none; }
+    .plane, .globe, .man, .woman { display: block; }
+    .content { padding: 64px 24px 280px; }
+    .wordmark { font-size: inherit; line-height: inherit; }
+    .fields, .buttons { grid-template-columns: 1fr 1fr; }
+    .trips { flex-direction: row; align-items: center; justify-content: space-between; }
+    .consent { justify-content: center; }
+    .badges { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 48px; }
+    .badge + .badge::before { content: '|'; color: var(--grey-40); }
+    .next { min-height: 480px; padding: 48px 24px; }
+  }
+  @media (min-width: 1024px) {
+    .hero { --k: 0.6; --k-plane: 0.6; }
+    .content { padding: 96px 32px; }
+    .next { min-height: 708px; padding: 64px 32px; }
+  }
+  @media (min-width: 1280px) {
+    .hero { --k: 0.8; --k-plane: 0.8; }
+  }
+  @media (min-width: 1440px) {
+    .hero { --k: 1; --k-plane: 1; }
+    .content { padding: 96px 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero .parallax, .hero .float, .hero .enter, .hero .reveal, .hero .badge, .hero .btn--primary {
+      animation: none !important; transition: none !important; transform: none !important; opacity: 1 !important;
+    }
+  }
+</style>
+</head>
+<body>
+<main>
+  <section class="hero" id="hero" data-play="idle" aria-labelledby="hero-title">
+    <div class="art plane" aria-hidden="true"><div class="parallax"><div class="float"><div class="enter"><img src="img/plane.svg" alt="" width="273" height="251"></div></div></div></div>
+    <div class="art globe" aria-hidden="true"><div class="parallax"><div class="float"><div class="enter"><img src="img/globe.svg" alt="" width="367" height="498"></div></div></div></div>
+    <div class="art man" aria-hidden="true"><div class="parallax"><div class="float"><div class="enter"><img src="img/man.svg" alt="" width="453" height="662"></div></div></div></div>
+    <div class="art woman" aria-hidden="true"><div class="parallax"><div class="float"><div class="enter"><img src="img/woman.svg" alt="" width="621" height="568"></div></div></div></div>
+
+    <div class="band" aria-hidden="true">
+      <div class="art earth-m"><div class="parallax"><div class="float"><div class="enter"><img src="img/earth-mobile.svg" alt="" width="167" height="168"></div></div></div></div>
+      <div class="art plane-m"><div class="parallax"><div class="float"><div class="enter"><img src="img/plane-mobile.svg" alt="" width="303" height="163"></div></div></div></div>
+    </div>
+
+    <div class="content">
+      <div class="heading reveal" style="--step: 0">
+        <h1 class="title" id="hero-title"><span class="wordmark">BestTrip</span> удобный сервис для&nbsp;командировок!</h1>
+        <p class="subtitle">Билеты, отели, трансферы, MICE и всё, что потребуется в пути</p>
+      </div>
+
+      <form class="form" aria-labelledby="hero-title" onsubmit="event.preventDefault()">
+        <div class="fields">
+          <label class="field reveal" style="--step: 3"><span class="sr-only">Фамилия Имя</span><input name="name" placeholder="Фамилия Имя"></label>
+          <label class="field reveal" style="--step: 4"><span class="sr-only">Телефон</span><input name="phone" type="tel" placeholder="+ 7 (XXX) XXX XX XX"></label>
+          <label class="field reveal" style="--step: 5"><span class="sr-only">Комментарий</span><input name="comment" placeholder="Комментарий"></label>
+          <label class="field reveal" style="--step: 6"><span class="sr-only">Электронная почта</span><input name="email" type="email" placeholder="Электронная почта"></label>
+        </div>
+
+        <div class="trips reveal" style="--step: 7">
+          <span>Командировок в месяц</span>
+          <div class="chips" id="chips">
+            <button class="chip" type="button" aria-pressed="true">не знаю</button>
+            <button class="chip" type="button" aria-pressed="false">до 10</button>
+            <button class="chip" type="button" aria-pressed="false">от 10 до 50</button>
+            <button class="chip" type="button" aria-pressed="false">от 50</button>
+          </div>
+        </div>
+
+        <div class="buttons reveal" style="--step: 8">
+          <button class="btn btn--primary" type="submit">Попробовать бесплатно</button>
+          <button class="btn btn--outline" type="button">Получить консультацию</button>
+        </div>
+
+        <div class="consent reveal" style="--step: 9">
+          <label class="checkbox">
+            <input type="checkbox" name="consent" checked>
+            <span class="checkbox__box"><img src="img/check.svg" alt=""></span>
+            <span class="checkbox__label">Подтверждаю <a href="https://besttrip.ru/%D0%A1%D0%BE%D0%B3%D0%BB%D0%B0%D1%81%D0%B8%D0%B5%20%D1%81%20%D0%BE%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%BE%D0%B8%20%D0%9F%D0%94%D0%BD.pdf" target="_blank" rel="noreferrer">согласие на обработку персональных данных</a></span>
+          </label>
+        </div>
+      </form>
+
+      <ul class="badges">
+        <li class="badge" style="--i: 0">Отсрочка платежей</li>
+        <li class="badge" style="--i: 1">Российское ПО</li>
+        <li class="badge" style="--i: 2">Участник Сколково</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="next" aria-label="Следующий блок">
+    <button class="btn btn--white" type="button" id="replay">Проиграть ещё раз</button>
+  </section>
+</main>
+
+<script>
+  (function () {
+    const hero = document.getElementById('hero');
+
+    // Старт, когда экран попал в поле зрения
+    const start = () => {
+      const io = new IntersectionObserver((entries) => {
+        if (entries.some((e) => e.isIntersecting)) { hero.dataset.play = 'run'; io.disconnect(); }
+      }, { threshold: 0.35 });
+      io.observe(hero);
+    };
+    start();
+
+    document.getElementById('replay').addEventListener('click', () => {
+      hero.dataset.play = 'idle';
+      void hero.offsetWidth; // сброс анимаций
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      start();
+    });
+
+    // Чипсы: выбран один вариант
+    const chips = document.querySelectorAll('#chips .chip');
+    chips.forEach((chip) => chip.addEventListener('click', () => {
+      chips.forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
+    }));
+
+    // Параллакс только для мыши и без «уменьшения движения»
+    if (matchMedia('(pointer: fine)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      let frame = 0;
+      hero.addEventListener('pointermove', (e) => {
+        cancelAnimationFrame(frame);
+        frame = requestAnimationFrame(() => {
+          const r = hero.getBoundingClientRect();
+          hero.style.setProperty('--mx', (((e.clientX - r.left) / r.width) * 2 - 1).toFixed(3));
+          hero.style.setProperty('--my', (((e.clientY - r.top) / r.height) * 2 - 1).toFixed(3));
+        });
+      });
+      hero.addEventListener('pointerleave', () => {
+        hero.style.setProperty('--mx', '0');
+        hero.style.setProperty('--my', '0');
+      });
+    }
+  })();
+</script>
+</body>
+</html>
