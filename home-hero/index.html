@@ -160,18 +160,15 @@
   /* ---------- Анимация ----------
      Фоновые иллюстрации не анимируются.
      0–840     заголовок, поля, чипсы, кнопки, согласие — по очереди, шаг 60
-     700–1250  значки доверия проявляются по очереди
-     1500      «Попробовать бесплатно» один раз «подпрыгивает» */
+     700–1250  значки доверия проявляются по очереди */
   .hero[data-play='idle'] .reveal,
   .hero[data-play='idle'] .badge { opacity: 0; }
 
   .hero[data-play='run'] .reveal { animation: reveal 300ms var(--ease-out) both; animation-delay: calc(var(--step) * 60ms); }
   .hero[data-play='run'] .badge { animation: badge-in var(--base) var(--ease-out) both; animation-delay: calc(700ms + var(--i) * 150ms); }
-  .hero[data-play='run'] .btn--primary { animation: bump 300ms var(--ease-state) 1500ms; }
 
   @keyframes reveal { from { opacity: 0; transform: translateY(12px); } }
   @keyframes badge-in { from { opacity: 0; transform: translateY(8px); } }
-  @keyframes bump { 50% { transform: scale(1.04); } }
 
   /* ---------- Брейкпоинты ---------- */
   @media (min-width: 600px) {
@@ -201,7 +198,7 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .hero .reveal, .hero .badge, .hero .btn--primary {
+    .hero .reveal, .hero .badge {
       animation: none !important; transition: none !important; transform: none !important; opacity: 1 !important;
     }
   }
