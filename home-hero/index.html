@@ -56,7 +56,7 @@
 
   /* ---------- Hero ---------- */
   .hero {
-    --k: 0.35; --k-plane: 0.45; --mx: 0; --my: 0;
+    --k: 0.35; --k-plane: 0.45;
     position: relative;
     overflow: hidden;
     padding-bottom: 64px;
@@ -146,63 +146,32 @@
   /* ---------- Иллюстрации ---------- */
   .art { position: absolute; z-index: 0; pointer-events: none; }
   .art img { display: block; width: 100%; height: auto; }
-  /* Обрезанные края заходят за экран на запас параллакса и покачивания */
-  .plane { display: none; top: calc(47px * var(--k-plane)); left: -20px; width: calc(273px * var(--k-plane)); }
-  .globe { display: none; bottom: 0; left: -8px; width: calc(367px * var(--k)); }
-  .man { display: none; right: -12px; bottom: 0; width: calc(453px * var(--k)); }
-  .woman { display: none; right: -8px; bottom: 0; width: calc(621px * var(--k)); }
+  /* Иллюстрации статичные: стоят на позициях из макета, обрезаны краем экрана */
+  .plane { display: none; top: calc(47px * var(--k-plane)); left: 0; width: calc(273px * var(--k-plane)); }
+  .globe { display: none; bottom: 0; left: 0; width: calc(367px * var(--k)); }
+  .man { display: none; right: 0; bottom: 0; width: calc(453px * var(--k)); }
+  .woman { display: none; right: 0; bottom: 0; width: calc(621px * var(--k)); }
 
   /* 375: полоса с глобусом и самолётом над заголовком */
   .band { position: relative; height: 176px; }
   .earth-m { top: 0; right: 0; width: 167px; }
-  .plane-m { top: 13px; right: -4px; width: 303px; }
-
-  .parallax { transition: transform var(--base) var(--ease-out); }
-  .plane .parallax { transform: translate(calc(var(--mx) * -16px), calc(var(--my) * -10px)); }
-  .globe .parallax { transform: translate(calc(var(--mx) * -6px), calc(var(--my) * -4px)); }
-  .man .parallax { transform: translate(calc(var(--mx) * 12px), calc(var(--my) * 6px)); }
-  .woman .parallax { transform: translate(calc(var(--mx) * 8px), calc(var(--my) * 4px)); }
+  .plane-m { top: 13px; right: 0; width: 303px; }
 
   /* ---------- Анимация ----------
+     Фоновые иллюстрации не анимируются.
      0–840     заголовок, поля, чипсы, кнопки, согласие — по очереди, шаг 60
-     0–1200    самолёт влетает на своё место
-     200–750   глобус и пара выезжают
-     1000–1550 значки доверия проявляются за самолётом
-     1500      «Попробовать бесплатно» один раз «подпрыгивает»
-     дальше    иллюстрации медленно «дышат», параллакс за курсором */
-  .hero[data-play='idle'] .enter,
+     700–1250  значки доверия проявляются по очереди
+     1500      «Попробовать бесплатно» один раз «подпрыгивает» */
   .hero[data-play='idle'] .reveal,
   .hero[data-play='idle'] .badge { opacity: 0; }
 
   .hero[data-play='run'] .reveal { animation: reveal 300ms var(--ease-out) both; animation-delay: calc(var(--step) * 60ms); }
-  .hero[data-play='run'] .plane .enter { animation: plane-in 1200ms cubic-bezier(0.2, 0.7, 0.3, 1) both; }
-  .hero[data-play='run'] .globe .enter { animation: enter-left 400ms var(--ease-out) 200ms both; }
-  .hero[data-play='run'] .man .enter { animation: enter-up 400ms var(--ease-out) 250ms both; }
-  .hero[data-play='run'] .woman .enter { animation: enter-up 400ms var(--ease-out) 350ms both; }
-  .hero[data-play='run'] .earth-m .enter { animation: enter-earth 400ms var(--ease-out) 100ms both; }
-  .hero[data-play='run'] .plane-m .enter { animation: plane-in-mobile 1000ms cubic-bezier(0.2, 0.7, 0.3, 1) both; }
-  .hero[data-play='run'] .badge { animation: badge-in var(--base) var(--ease-out) both; animation-delay: calc(1000ms + var(--i) * 150ms); }
+  .hero[data-play='run'] .badge { animation: badge-in var(--base) var(--ease-out) both; animation-delay: calc(700ms + var(--i) * 150ms); }
   .hero[data-play='run'] .btn--primary { animation: bump 300ms var(--ease-state) 1500ms; }
 
-  .hero[data-play='run'] .plane .float { transform-origin: 30% 60%; animation: float-plane 6s var(--ease-state) 1200ms infinite alternate; }
-  .hero[data-play='run'] .globe .float { transform-origin: 0 50%; animation: breathe 8s var(--ease-state) 600ms infinite alternate; }
-  .hero[data-play='run'] .man .float { animation: sway 7s var(--ease-state) 650ms infinite alternate; }
-  .hero[data-play='run'] .woman .float { animation: sway-small 5.5s var(--ease-state) 750ms infinite alternate; }
-  .hero[data-play='run'] .plane-m .float { transform-origin: 60% 50%; animation: float-plane-mobile 6s var(--ease-state) 1000ms infinite alternate; }
-
   @keyframes reveal { from { opacity: 0; transform: translateY(12px); } }
-  @keyframes plane-in { from { opacity: 0; transform: translate(-420px, 260px) rotate(10deg); } 25% { opacity: 1; } }
-  @keyframes plane-in-mobile { from { opacity: 0; transform: translate(220px, 120px) rotate(-6deg); } 25% { opacity: 1; } }
-  @keyframes enter-left { from { opacity: 0; transform: translateX(-40px); } }
-  @keyframes enter-up { from { opacity: 0; transform: translateY(40px); } }
-  @keyframes enter-earth { from { opacity: 0; transform: translate(24px, -24px); } }
   @keyframes badge-in { from { opacity: 0; transform: translateY(8px); } }
   @keyframes bump { 50% { transform: scale(1.04); } }
-  @keyframes float-plane { to { transform: translateY(-10px) rotate(-1.5deg); } }
-  @keyframes float-plane-mobile { to { transform: translateY(-6px) rotate(1deg); } }
-  @keyframes breathe { to { transform: scale(1.02); } }
-  @keyframes sway { to { transform: translateY(-8px); } }
-  @keyframes sway-small { to { transform: translateY(-5px); } }
 
   /* ---------- Брейкпоинты ---------- */
   @media (min-width: 600px) {
@@ -232,7 +201,7 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .hero .parallax, .hero .float, .hero .enter, .hero .reveal, .hero .badge, .hero .btn--primary {
+    .hero .reveal, .hero .badge, .hero .btn--primary {
       animation: none !important; transition: none !important; transform: none !important; opacity: 1 !important;
     }
   }
@@ -241,14 +210,14 @@
 <body>
 <main>
   <section class="hero" id="hero" data-play="idle" aria-labelledby="hero-title">
-    <div class="art plane" aria-hidden="true"><div class="parallax"><div class="float"><div class="enter"><img src="img/plane.svg" alt="" width="273" height="251"></div></div></div></div>
-    <div class="art globe" aria-hidden="true"><div class="parallax"><div class="float"><div class="enter"><img src="img/globe.svg" alt="" width="367" height="498"></div></div></div></div>
-    <div class="art man" aria-hidden="true"><div class="parallax"><div class="float"><div class="enter"><img src="img/man.svg" alt="" width="453" height="662"></div></div></div></div>
-    <div class="art woman" aria-hidden="true"><div class="parallax"><div class="float"><div class="enter"><img src="img/woman.svg" alt="" width="621" height="568"></div></div></div></div>
+    <div class="art plane" aria-hidden="true"><img src="img/plane.svg" alt="" width="273" height="251"></div>
+    <div class="art globe" aria-hidden="true"><img src="img/globe.svg" alt="" width="367" height="498"></div>
+    <div class="art man" aria-hidden="true"><img src="img/man.svg" alt="" width="453" height="662"></div>
+    <div class="art woman" aria-hidden="true"><img src="img/woman.svg" alt="" width="621" height="568"></div>
 
     <div class="band" aria-hidden="true">
-      <div class="art earth-m"><div class="parallax"><div class="float"><div class="enter"><img src="img/earth-mobile.svg" alt="" width="167" height="168"></div></div></div></div>
-      <div class="art plane-m"><div class="parallax"><div class="float"><div class="enter"><img src="img/plane-mobile.svg" alt="" width="303" height="163"></div></div></div></div>
+      <div class="art earth-m"><img src="img/earth-mobile.svg" alt="" width="167" height="168"></div>
+      <div class="art plane-m"><img src="img/plane-mobile.svg" alt="" width="303" height="163"></div>
     </div>
 
     <div class="content">
@@ -328,22 +297,6 @@
       chips.forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
     }));
 
-    // Параллакс только для мыши и без «уменьшения движения»
-    if (matchMedia('(pointer: fine)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      let frame = 0;
-      hero.addEventListener('pointermove', (e) => {
-        cancelAnimationFrame(frame);
-        frame = requestAnimationFrame(() => {
-          const r = hero.getBoundingClientRect();
-          hero.style.setProperty('--mx', (((e.clientX - r.left) / r.width) * 2 - 1).toFixed(3));
-          hero.style.setProperty('--my', (((e.clientY - r.top) / r.height) * 2 - 1).toFixed(3));
-        });
-      });
-      hero.addEventListener('pointerleave', () => {
-        hero.style.setProperty('--mx', '0');
-        hero.style.setProperty('--my', '0');
-      });
-    }
   })();
 </script>
 </body>
